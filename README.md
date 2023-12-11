@@ -36,7 +36,7 @@ The command above should output the version number of the app.
 
 ## Configuration
 
-Before running the app, make sure that you have a valid kubeconfig for the cluster that you intend work with in the following path:
+Before running the app, make sure that you have a valid kubeconfig for the cluster that you intend to work with in the following path:
 
 ```sh
 ~/.kube/config
