@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
+	app.CheckAppVersion()
 	app.Create()
 }

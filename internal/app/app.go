@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -21,9 +22,24 @@ import (
 )
 
 const (
+	APP_VERSION   = "v0.1.0"
 	SEPARATOR     = "\n*****************************************************************\n\n"
 	SEPARATOR_NNL = "*****************************************************************"
 )
+
+func CheckAppVersion() {
+	var checkVersion bool
+
+	flag.BoolVar(&checkVersion, "version", false, "display the current version")
+	flag.BoolVar(&checkVersion, "v", false, "alias for display the current version")
+
+	flag.Parse()
+
+	if checkVersion {
+		fmt.Println(APP_VERSION)
+		os.Exit(0)
+	}
+}
 
 func Create() {
 	PrintHeader()
