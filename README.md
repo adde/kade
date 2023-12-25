@@ -58,7 +58,8 @@ Do not, I repeat, DO NOT use this tool to deploy applications to a production cl
 
 This library is built on top of many great libraries, especially the following:
 
-* https://github.com/erikgeiser/promptkit/
+* https://github.com/erikgeiser/promptkit
+* https://github.com/charmbracelet/lipgloss
 
 ## License
 
