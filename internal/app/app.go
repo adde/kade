@@ -12,6 +12,7 @@ import (
 	"github.com/adde/kade/internal/prompts"
 	"github.com/adde/kade/internal/svc"
 	"github.com/briandowns/spinner"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/erikgeiser/promptkit/confirmation"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -192,20 +193,13 @@ func GetAppType() string {
 }
 
 func PrintHeader() {
-	fmt.Print(SEPARATOR_NNL + "\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print("*                            KADE                               *\n")
-	fmt.Print("*           Kubernetes Application Deployment Engine            *\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print(SEPARATOR_NNL + "\n\n")
+	style := getContainerStyle()
+	fmt.Println(style.Render("KADE\nKubernetes Application Deployment Engine"))
 }
 
 func PrintNotImplemented() {
-	fmt.Print(SEPARATOR_NNL + "\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print("*             Not implemented yet, come back later!             *\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print(SEPARATOR_NNL + "\n\n")
+	style := getContainerStyle()
+	fmt.Println(style.Render("Not implemented yet, come back later!"))
 }
 
 func PrintPreparingEnvironment() {
@@ -217,20 +211,18 @@ func PrintPreparingEnvironment() {
 }
 
 func PrintEnvironmentReady(url string) {
-	// Calculate spaces to center the URL
-	spaces, extra := "", ""
-	for i := 0; i < (len(SEPARATOR_NNL)-len(url)-2)/2; i++ {
-		spaces += " "
-	}
-	if len(url)%2 == 0 {
-		extra += " "
-	}
+	style := getContainerStyle()
+	fmt.Println(style.Render("✔ Environment ready:\n\n" + url))
+}
 
-	fmt.Print(SEPARATOR_NNL + "\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print("*                     ✔ Environment ready:                      *\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print("*" + spaces + url + spaces + extra + "*\n")
-	fmt.Print("*                                                               *\n")
-	fmt.Print(SEPARATOR_NNL + "\n\n")
+func getContainerStyle() lipgloss.Style {
+	return lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("#FAFAFA")).
+		Border(lipgloss.RoundedBorder()).
+		PaddingTop(1).
+		PaddingBottom(1).
+		PaddingLeft(4).
+		PaddingRight(4).
+		Width(64).Align(lipgloss.Center)
 }
