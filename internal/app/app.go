@@ -23,9 +23,7 @@ import (
 )
 
 const (
-	APP_VERSION   = "v0.1.0"
-	SEPARATOR     = "\n*****************************************************************\n\n"
-	SEPARATOR_NNL = "*****************************************************************"
+	APP_VERSION = "v0.1.1"
 )
 
 func CheckAppVersion() {
@@ -78,45 +76,47 @@ func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appT
 			confirmation.No)
 
 		if confirm {
-			fmt.Print(SEPARATOR)
+			sepStyle := getSeparatorStyle()
+			fmt.Println(sepStyle.Render(""))
 			fmt.Print("Deploying resources to cluster...\n\n")
 
 			// Create namespace
 			wp.CreateNamespace(
-				"✔ Namespace %s created\n\n",
-				"⚠ Namespace already exists, continuing...\n\n")
+				"✔ Namespace %s created\n",
+				"⚠ Namespace already exists, continuing...\n")
 
 			// Create PVC
 			wp.CreatePvc(
-				"✔ PVC %s created\n\n",
-				"⚠ PVC already exists, continuing...\n\n")
+				"✔ PVC %s created\n",
+				"⚠ PVC already exists, continuing...\n")
 
 			wp.CreateDbPasswordSecret(
-				"✔ Database password secret %s created\n\n",
-				"⚠ Database password secret already exists, continuing...\n\n",
+				"✔ Database password secret %s created\n",
+				"⚠ Database password secret already exists, continuing...\n",
 			)
 
 			wp.CreateRegistryAuthSecret(
-				"✔ Container registry auth secret %s created\n\n",
-				"⚠ Container registry auth secret already exists, continuing...\n\n",
-				"⚠ No container registry credentials provided, skipping...\n\n",
+				"✔ Container registry auth secret %s created\n",
+				"⚠ Container registry auth secret already exists, continuing...\n",
+				"⚠ No container registry credentials provided, skipping...\n",
 			)
 
 			wp.CreateDeployment(
-				"✔ WordPress deployment %s created\n\n",
-				"⚠ WordPress deployment already exists, continuing...\n\n",
+				"✔ WordPress deployment %s created\n",
+				"⚠ WordPress deployment already exists, continuing...\n",
 			)
 
 			wp.CreateService(
-				"✔ WordPress service %s created\n\n",
-				"⚠ WordPress service already exists, continuing...\n\n",
+				"✔ WordPress service %s created\n",
+				"⚠ WordPress service already exists, continuing...\n",
 			)
 
 			wp.CreateIngress(
-				"✔ WordPress ingress %s created\n\n",
-				"⚠ WordPress ingress already exists, continuing...\n\n",
+				"✔ WordPress ingress %s created\n",
+				"⚠ WordPress ingress already exists, continuing...\n",
 			)
 
+			fmt.Println()
 			PrintPreparingEnvironment()
 			PrintEnvironmentReady(wp.GetDeploymentUrl())
 		} else {
@@ -194,7 +194,8 @@ func GetAppType() string {
 
 func PrintHeader() {
 	style := getContainerStyle()
-	fmt.Println(style.Render("KADE\nKubernetes Application Deployment Engine"))
+	fmt.Println(style.Render("KADE\nKubernetes Application Deployment Engine\n" + APP_VERSION))
+	fmt.Println()
 }
 
 func PrintNotImplemented() {
@@ -220,9 +221,20 @@ func getContainerStyle() lipgloss.Style {
 		Bold(true).
 		Foreground(lipgloss.Color("#FAFAFA")).
 		Border(lipgloss.RoundedBorder()).
+		Align(lipgloss.Center).
 		PaddingTop(1).
 		PaddingBottom(1).
 		PaddingLeft(4).
 		PaddingRight(4).
-		Width(64).Align(lipgloss.Center)
+		Width(64)
+}
+
+func getSeparatorStyle() lipgloss.Style {
+	return lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder()).
+		BorderTop(false).
+		BorderRight(false).
+		BorderLeft(false).
+		MarginBottom(1).
+		Width(64)
 }
