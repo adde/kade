@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	app.CheckAppVersion()
+	app.ParseFlags()
 	app.Create()
 }

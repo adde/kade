@@ -26,7 +26,7 @@ const (
 	APP_VERSION = "v0.1.1"
 )
 
-func CheckAppVersion() {
+func ParseFlags() {
 	var checkVersion bool
 
 	flag.BoolVar(&checkVersion, "version", false, "display the current version")
