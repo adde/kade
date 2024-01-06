@@ -247,5 +247,5 @@ func getSeparatorStyle() lipgloss.Style {
 		BorderRight(false).
 		BorderLeft(false).
 		MarginBottom(1).
-		Width(64)
+		Width(66)
 }
