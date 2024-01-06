@@ -50,6 +50,14 @@ In a terminal, simply run the following command and follow the steps presented:
 kade
 ```
 
+### Config file
+
+To avoid having to input the same information for Container Registry and Database everytime running the app, you can store this information in a config file. To create a config file, run the following command:
+
+```sh
+kade --create-config
+```
+
 ## Disclaimer
 
 Do not, I repeat, DO NOT use this tool to deploy applications to a production cluster. This tool is for testing purposes only.
