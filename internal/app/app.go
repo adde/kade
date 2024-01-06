@@ -138,7 +138,7 @@ func InitKubernetesConnection() (*kubernetes.Clientset, api.Config) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Using config from path: ~/.kube/config")
+	fmt.Println("Using kube config from path: ~/.kube/config")
 	fmt.Println("Connecting to Kubernetes cluster... ")
 
 	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
