@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 
+	"github.com/adde/kade/internal/prompts"
 	"gopkg.in/yaml.v2"
 )
 
@@ -46,6 +47,38 @@ func GetConfig() *Config {
 	return cfg
 }
 
+func CreateConfig() {
+	if fileExists(getUserHomeDir() + CONFIG_PATH) {
+		fmt.Println("Config file already exists, aborting...")
+		os.Exit(0)
+	}
+
+	fmt.Print("Creating config file...\n\n")
+
+	cfg := Config{
+		Global: GlobalConfig{
+			ContainerRegistry: ContainerRegistryConfig{
+				Uri:  prompts.TextInput("Container registry URI?", "", "", false),
+				User: prompts.TextInput("Container registry user?", "", "", false),
+				Pass: prompts.PassWordInput("Container registry password?", "", "", false),
+			},
+			Database: DatabaseConfig{
+				Host: prompts.TextInput("Database host?", "", "", false),
+				User: prompts.TextInput("Database user?", "", "", false),
+				Pass: prompts.PassWordInput("Database password?", "", "", false),
+			},
+		},
+	}
+
+	err := writeConfig(getUserHomeDir()+CONFIG_PATH, &cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("\nConfig file created!")
+}
+
 func readConfig(filename string) (*Config, error) {
 	buf, err := os.ReadFile(filename)
 	if err != nil {
@@ -59,6 +92,29 @@ func readConfig(filename string) (*Config, error) {
 	}
 
 	return &cfg, nil
+}
+
+func writeConfig(filename string, cfg *Config) error {
+	buf, err := yaml.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(filename, buf, 0644)
+}
+
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	if err == nil {
+		return true
+	}
+
+	if os.IsNotExist(err) {
+		return false
+	}
+
+	// File may exist but there's an error accessing it (e.g. permissions issue)
+	return false
 }
 
 func getUserHomeDir() string {
