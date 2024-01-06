@@ -28,14 +28,23 @@ const (
 
 func ParseFlags() {
 	var checkVersion bool
+	var createConfig bool
 
 	flag.BoolVar(&checkVersion, "version", false, "display the current version")
 	flag.BoolVar(&checkVersion, "v", false, "alias for display the current version")
+
+	flag.BoolVar(&createConfig, "create-config", false, "create config file")
+	flag.BoolVar(&createConfig, "cc", false, "alias for create config file")
 
 	flag.Parse()
 
 	if checkVersion {
 		fmt.Println(APP_VERSION)
+		os.Exit(0)
+	}
+
+	if createConfig {
+		CreateConfig()
 		os.Exit(0)
 	}
 }
