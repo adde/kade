@@ -56,10 +56,14 @@ func ConfirmationInput(label string, initialValue confirmation.Value) bool {
 	return value
 }
 
-func PassWordInput(label string, placeholder string, required bool) string {
+func PassWordInput(label, placeholder, initialValue string, required bool) string {
 	input := textinput.New(label)
 	input.Placeholder = placeholder
 	input.Hidden = true
+
+	if initialValue != "" {
+		input.InitialValue = initialValue
+	}
 
 	if !required {
 		input.Validate = func(value string) error { return nil }
