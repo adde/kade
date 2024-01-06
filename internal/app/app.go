@@ -44,12 +44,13 @@ func Create() {
 	PrintHeader()
 
 	clientset, rawConfig := InitKubernetesConnection()
+	appConfig := GetConfig()
 	appType := GetAppType()
 
-	CreateAppByType(clientset, rawConfig, appType)
+	CreateAppByType(clientset, rawConfig, appConfig, appType)
 }
 
-func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appType string) {
+func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appConfig *Config, appType string) {
 	switch appType {
 	case "WordPress":
 		wp := svc.WordPress{
@@ -57,15 +58,15 @@ func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appT
 			DeploymentName:        prompts.TextInput("Deployment name?", "", svc.WP_PLACEHOLDER_DEPLOYMENT, true),
 			UploadsVolSize:        prompts.TextInput("WordPress uploads volume size(Gi)?", "", svc.WP_PLACEHOLDER_WP_UPLOADS, true),
 			ContainerImage:        prompts.TextInput("Container image to deploy?", "", "wordpress:6.4.2", true),
-			ContainerRegistryUri:  prompts.TextInput("Container registry URI(leave blank if docker.com)?", "", "", false),
-			ContainerRegistryUser: prompts.TextInput("Container registry user(leave blank if docker.com)?", "", "", false),
-			ContainerRegistryPass: prompts.PassWordInput("Container registry password(leave blank if docker.com)?", "", false),
+			ContainerRegistryUri:  prompts.TextInput("Container registry URI(leave blank if docker.com)?", "", appConfig.Global.ContainerRegistry.Uri, false),
+			ContainerRegistryUser: prompts.TextInput("Container registry user(leave blank if docker.com)?", "", appConfig.Global.ContainerRegistry.User, false),
+			ContainerRegistryPass: prompts.PassWordInput("Container registry password(leave blank if docker.com)?", "", appConfig.Global.ContainerRegistry.Pass, false),
 			Hostname:              prompts.TextInput("Hostname that the web app should be exposed on?", svc.WP_PLACEHOLDER_HOSTNAME, "", true),
 			IngressTls:            prompts.ConfirmationInput("Do you want to configure TLS for the app?", confirmation.No),
-			DatabaseHost:          prompts.TextInput("Database host?", svc.WP_PLACEHOLDER_DB_HOST, "", true),
+			DatabaseHost:          prompts.TextInput("Database host?", "", appConfig.Global.Database.Host, true),
 			DatabaseName:          prompts.TextInput("Database name?", svc.WP_PLACEHOLDER_DB_NAME, "", true),
-			DatabaseUser:          prompts.TextInput("Database user?", "", svc.WP_PLACEHOLDER_DB_USER, true),
-			DatabasePass:          prompts.PassWordInput("Database password?", "", true),
+			DatabaseUser:          prompts.TextInput("Database user?", "", appConfig.Global.Database.User, true),
+			DatabasePass:          prompts.PassWordInput("Database password?", "", appConfig.Global.Database.Pass, true),
 			Clientset:             clientset,
 		}
 
