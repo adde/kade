@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/adde/kade/internal/config"
 	"github.com/adde/kade/internal/prompts"
 	"github.com/adde/kade/internal/svc"
 	"github.com/briandowns/spinner"
@@ -44,7 +45,7 @@ func ParseFlags() {
 	}
 
 	if createConfig {
-		CreateConfig()
+		config.CreateConfig()
 		os.Exit(0)
 	}
 }
@@ -53,13 +54,13 @@ func Create() {
 	PrintHeader()
 
 	clientset, rawConfig := InitKubernetesConnection()
-	appConfig := GetConfig()
+	appConfig := config.GetConfig()
 	appType := GetAppType()
 
 	CreateAppByType(clientset, rawConfig, appConfig, appType)
 }
 
-func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appConfig *Config, appType string) {
+func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appConfig *config.Config, appType string) {
 	switch appType {
 	case "WordPress":
 		wp := svc.WordPress{
