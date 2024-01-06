@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	CONFIG_DIR = "/.config/kade/config.yml"
+	CONFIG_PATH = "/.config/kade/config.yml"
 )
 
 type DatabaseConfig struct {
@@ -35,7 +35,7 @@ type Config struct {
 }
 
 func GetConfig() *Config {
-	cfg, err := readConfig(getUserHomeDir() + CONFIG_DIR)
+	cfg, err := readConfig(getUserHomeDir() + CONFIG_PATH)
 
 	if err != nil {
 		fmt.Print("Could not load app config, will ask for required information...\n\n")
