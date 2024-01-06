@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	APP_VERSION = "v0.1.1"
+	APP_VERSION = "v0.2.0"
 )
 
 func ParseFlags() {
