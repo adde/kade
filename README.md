@@ -6,7 +6,7 @@ __KADE__ or __Kubernetes Application Deployment Engine__ is a simple CLI tool th
 
 You can download the latest version of the app from the [release section](https://github.com/adde/kade/releases/latest) of this repo.
 
-Below follows an example to download and install the latest version on Mac(Apple Silicon). For other platforms, replace the binary name in the curl command with the relevant binary for your system:
+Below is an example of how to download and install the latest version on Mac(Apple Silicon). For other platforms, replace the binary name in the commands with the relevant binary for your system:
 
 ### Download the latest release:
 
