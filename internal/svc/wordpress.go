@@ -206,6 +206,9 @@ func (w WordPress) CreateRegistryAuthSecret(successMessage, existsMessage, noCon
 }
 
 func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv1.Deployment {
+	uniqueID := utils.GenerateUniqueID()
+	appLabel := "deployment-" + w.Namespace + "-" + w.DeploymentName + "-" + uniqueID
+
 	wordpressUrl := w.Hostname
 	if w.IngressTls {
 		wordpressUrl = "https://" + wordpressUrl
@@ -222,13 +225,13 @@ func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv
 			Replicas: utils.Int32Ptr(1),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app": w.DeploymentName,
+					"app": appLabel,
 				},
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"app": w.DeploymentName,
+						"app": appLabel,
 					},
 				},
 				Spec: corev1.PodSpec{
