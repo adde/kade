@@ -133,10 +133,8 @@ func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appC
 		} else {
 			fmt.Println("Aborting...")
 		}
-		break
 	case "Simple web app":
 		PrintNotImplemented()
-		break
 	}
 }
 
