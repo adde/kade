@@ -86,7 +86,7 @@ func (w WordPress) CreateNamespace(successMessage, existsMessage string) *v1.Nam
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -122,7 +122,7 @@ func (w WordPress) CreatePvc(successMessage, existsMessage string) *v1.Persisten
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -153,7 +153,7 @@ func (w WordPress) CreateDbPasswordSecret(successMessage, existsMessage string) 
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -166,7 +166,7 @@ func (w WordPress) CreateDbPasswordSecret(successMessage, existsMessage string) 
 
 func (w WordPress) CreateRegistryAuthSecret(successMessage, existsMessage, noContainerRegistryCredsMessage string) *v1.Secret {
 	if w.ContainerRegistryUri == "" || w.ContainerRegistryUser == "" || w.ContainerRegistryPass == "" {
-		fmt.Printf(noContainerRegistryCredsMessage)
+		fmt.Print(noContainerRegistryCredsMessage)
 		return nil
 	}
 
@@ -194,7 +194,7 @@ func (w WordPress) CreateRegistryAuthSecret(successMessage, existsMessage, noCon
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -316,7 +316,7 @@ func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -356,7 +356,7 @@ func (w WordPress) CreateService(successMessage, existsMessage string) *corev1.S
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			log.Fatal(err)
 		}
@@ -427,7 +427,7 @@ func (w WordPress) CreateIngress(successMessage, existsMessage string) *networki
 
 	if err != nil {
 		if strings.Contains(err.Error(), "already exists") {
-			fmt.Printf(existsMessage)
+			fmt.Print(existsMessage)
 		} else {
 			panic(err)
 		}
