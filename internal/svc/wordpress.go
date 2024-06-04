@@ -27,7 +27,6 @@ const (
 	WP_PLACEHOLDER_DB_NAME    = "my_project"
 	WP_PLACEHOLDER_DB_USER    = "root"
 	K8S_PVC_NAME              = "wp-uploads"
-	K8S_PV_NAME               = "wp-data"
 	K8S_DB_SECRET_KEY         = "WORDPRESS_DB_PASSWORD"
 	K8S_DB_SECRET_NAME        = "wp-db-password"
 	K8S_REGISTRY_SECRET_NAME  = "wp-registry-auth"
@@ -117,7 +116,7 @@ func (w WordPress) CreatePvc(successMessage, existsMessage string) *v1.Persisten
 
 	createdPvc, err := w.Clientset.
 		CoreV1().
-		PersistentVolumeClaims(pvc.Namespace).
+		PersistentVolumeClaims(w.Namespace).
 		Create(context.Background(), pvc, metav1.CreateOptions{})
 
 	if err != nil {
@@ -248,7 +247,7 @@ func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv
 							},
 							VolumeMounts: []corev1.VolumeMount{
 								{
-									Name:      K8S_PV_NAME,
+									Name:      K8S_PVC_NAME,
 									MountPath: "/var/www/html/wp-content/uploads",
 								},
 							},
@@ -285,7 +284,7 @@ func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv
 					},
 					Volumes: []corev1.Volume{
 						{
-							Name: K8S_PV_NAME,
+							Name: K8S_PVC_NAME,
 							VolumeSource: corev1.VolumeSource{
 								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
 									ClaimName: K8S_PVC_NAME,
