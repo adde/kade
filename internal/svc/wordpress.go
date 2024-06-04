@@ -11,7 +11,6 @@ import (
 	"github.com/adde/kade/internal/utils"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -70,8 +69,8 @@ func (w WordPress) GetDeploymentUrl() string {
 	return wordpressUrl
 }
 
-func (w WordPress) CreateNamespace(successMessage, existsMessage string) *v1.Namespace {
-	namespace := &v1.Namespace{
+func (w WordPress) CreateNamespace(successMessage, existsMessage string) *corev1.Namespace {
+	namespace := &corev1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: w.Namespace,
 		},
@@ -96,7 +95,7 @@ func (w WordPress) CreateNamespace(successMessage, existsMessage string) *v1.Nam
 	return createdNamespace
 }
 
-func (w WordPress) CreatePvc(successMessage, existsMessage string) *v1.PersistentVolumeClaim {
+func (w WordPress) CreatePvc(successMessage, existsMessage string) *corev1.PersistentVolumeClaim {
 	pvc := &corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      K8S_PVC_NAME,
@@ -132,7 +131,7 @@ func (w WordPress) CreatePvc(successMessage, existsMessage string) *v1.Persisten
 	return createdPvc
 }
 
-func (w WordPress) CreateDbPasswordSecret(successMessage, existsMessage string) *v1.Secret {
+func (w WordPress) CreateDbPasswordSecret(successMessage, existsMessage string) *corev1.Secret {
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      K8S_DB_SECRET_NAME,
@@ -163,7 +162,7 @@ func (w WordPress) CreateDbPasswordSecret(successMessage, existsMessage string) 
 	return createdSecret
 }
 
-func (w WordPress) CreateRegistryAuthSecret(successMessage, existsMessage, noContainerRegistryCredsMessage string) *v1.Secret {
+func (w WordPress) CreateRegistryAuthSecret(successMessage, existsMessage, noContainerRegistryCredsMessage string) *corev1.Secret {
 	if w.ContainerRegistryUri == "" || w.ContainerRegistryUser == "" || w.ContainerRegistryPass == "" {
 		fmt.Print(noContainerRegistryCredsMessage)
 		return nil
