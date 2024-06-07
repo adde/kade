@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"strings"
 
 	"github.com/adde/kade/internal/prompts"
 	"gopkg.in/yaml.v2"
@@ -95,6 +96,16 @@ func readConfig(filename string) (*Config, error) {
 }
 
 func writeConfig(filename string, cfg *Config) error {
+	dir := strings.ReplaceAll(filename, "/config.yml", "")
+
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+
+		if err != nil {
+			return err
+		}
+	}
+
 	buf, err := yaml.Marshal(cfg)
 	if err != nil {
 		return err
