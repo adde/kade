@@ -1,19 +1,19 @@
 package version
 
 import (
-	"bufio"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
-	"os"
+
+	_ "embed"
 )
 
 const (
 	GH_API_URL = "https://api.github.com/repos/adde/kade"
 )
 
-var CurrentVersion = GetCurrentVersion()
+//go:embed version.txt
+var CurrentVersion string
 var LatestVersion = GetLatestVersion()
 
 func IsLatestVersion() bool {
@@ -41,25 +41,4 @@ func GetLatestVersion() string {
 	}
 
 	return release.TagName
-}
-
-func GetCurrentVersion() string {
-	file, err := os.Open("version.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		return line
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	return ""
 }
