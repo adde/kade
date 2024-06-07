@@ -128,7 +128,7 @@ func CreateAppByType(clientset *kubernetes.Clientset, rawConfig api.Config, appC
 			)
 
 			fmt.Println()
-			PrintPreparingEnvironment()
+			PrintPreparingEnvironment(wp)
 			PrintEnvironmentReady(wp.GetDeploymentUrl())
 		} else {
 			fmt.Println("Aborting...")
@@ -212,11 +212,20 @@ func PrintNotImplemented() {
 	fmt.Println(style.Render("Not implemented yet, come back later!"))
 }
 
-func PrintPreparingEnvironment() {
+func PrintPreparingEnvironment(wp svc.WordPress) {
 	p := spinner.New(spinner.CharSets[26], 250*time.Millisecond)
 	p.Prefix = "Preparing the environment "
 	p.Start()
-	time.Sleep(25 * time.Second)
+
+	count := 0
+	for !wp.IsDeploymentReady() {
+		time.Sleep(5 * time.Second)
+		count++
+		if count == 11 {
+			break
+		}
+	}
+
 	p.Stop()
 }
 

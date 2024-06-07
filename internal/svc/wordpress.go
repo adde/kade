@@ -446,6 +446,20 @@ func (w WordPress) CreateIngress(successMessage, existsMessage string) *networki
 	return createdIngress
 }
 
+func (w WordPress) IsDeploymentReady() bool {
+	deployment, err := w.Clientset.AppsV1().Deployments(w.Namespace).Get(
+		context.Background(),
+		w.DeploymentName,
+		metav1.GetOptions{},
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return deployment.Status.AvailableReplicas > 0
+}
+
 func (w WordPress) getDockerAuthConfig() DockerConfig {
 	dockerConfig := DockerConfig{
 		Auths: map[string]struct {
