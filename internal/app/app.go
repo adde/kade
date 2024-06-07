@@ -12,6 +12,7 @@ import (
 	"github.com/adde/kade/internal/config"
 	"github.com/adde/kade/internal/prompts"
 	"github.com/adde/kade/internal/svc"
+	"github.com/adde/kade/internal/version"
 	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/erikgeiser/promptkit/confirmation"
@@ -23,9 +24,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-const (
-	APP_VERSION = "v0.2.1"
-)
+var skipVersionCheck bool
 
 func ParseFlags() {
 	var checkVersion bool
@@ -34,13 +33,15 @@ func ParseFlags() {
 	flag.BoolVar(&checkVersion, "version", false, "display the current version")
 	flag.BoolVar(&checkVersion, "v", false, "alias for display the current version")
 
+	flag.BoolVar(&skipVersionCheck, "skip-version-check", false, "skip checking for latest version of the app")
+
 	flag.BoolVar(&createConfig, "create-config", false, "create config file")
 	flag.BoolVar(&createConfig, "cc", false, "alias for create config file")
 
 	flag.Parse()
 
 	if checkVersion {
-		fmt.Println(APP_VERSION)
+		fmt.Println(version.CurrentVersion)
 		os.Exit(0)
 	}
 
@@ -51,6 +52,10 @@ func ParseFlags() {
 }
 
 func Create() {
+	if !skipVersionCheck {
+		PrintVersionInfo()
+	}
+
 	PrintHeader()
 
 	clientset, rawConfig := InitKubernetesConnection()
@@ -203,8 +208,18 @@ func GetAppType() string {
 
 func PrintHeader() {
 	style := getContainerStyle()
-	fmt.Println(style.Render("KADE\nKubernetes Application Deployment Engine\n" + APP_VERSION))
+	fmt.Println(style.Render("KADE\nKubernetes Application Deployment Engine\n" + version.CurrentVersion))
 	fmt.Println()
+}
+
+func PrintVersionInfo() {
+	if !version.IsLatestVersion() {
+		style := getContainerStyle()
+		fmt.Println(style.Render(
+			"A new version of KADE is available, please update to the latest version.\n\n" +
+				"Current version: " + version.CurrentVersion + "\nLatest version: " + version.LatestVersion))
+		os.Exit(0)
+	}
 }
 
 func PrintNotImplemented() {
