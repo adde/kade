@@ -326,6 +326,16 @@ func (w WordPress) CreateDeployment(successMessage, existsMessage string) *appsv
 }
 
 func (w WordPress) CreateService(successMessage, existsMessage string) *corev1.Service {
+	deployment, err := w.Clientset.AppsV1().Deployments(w.Namespace).Get(
+		context.Background(),
+		w.DeploymentName,
+		metav1.GetOptions{},
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	service := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      w.DeploymentName,
@@ -333,7 +343,7 @@ func (w WordPress) CreateService(successMessage, existsMessage string) *corev1.S
 		},
 		Spec: corev1.ServiceSpec{
 			Selector: map[string]string{
-				"app": w.DeploymentName,
+				"app": deployment.Spec.Selector.MatchLabels["app"],
 			},
 			Ports: []corev1.ServicePort{
 				{
