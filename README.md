@@ -1,6 +1,6 @@
 # KADE
 
-<p>
+<p align="center">
   <img src="https://github.com/adde/kade/assets/1253342/c4a85051-2e88-474f-8308-369217cbbac5" width="300" />
 </p>
 
